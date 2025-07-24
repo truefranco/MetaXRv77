@@ -1,4 +1,4 @@
-﻿// Copyright (c) Meta Platforms, Inc. and affiliates.
+// Copyright (c) Meta Platforms, Inc. and affiliates.
 
 #include "OculusXRInputHapticsExtensionPlugin.h"
 
@@ -103,8 +103,8 @@ namespace OculusXRInput
 		HapticsActionSet = XR_NULL_HANDLE;
 		XrActionSetCreateInfo ActionSetInfo{ XR_TYPE_ACTION_SET_CREATE_INFO };
 		ActionSetInfo.next = nullptr;
-		FCStringAnsi::Strcpy(ActionSetInfo.actionSetName, XR_MAX_ACTION_SET_NAME_SIZE, "oculushapticsactionset");
-		FCStringAnsi::Strcpy(ActionSetInfo.localizedActionSetName, XR_MAX_LOCALIZED_ACTION_SET_NAME_SIZE, "OculusHapticsActionSet");
+		FCStringAnsi::Strncpy(ActionSetInfo.actionSetName, "oculushapticsactionset", XR_MAX_ACTION_SET_NAME_SIZE);
+		FCStringAnsi::Strncpy(ActionSetInfo.localizedActionSetName, "OculusHapticsActionSet", XR_MAX_LOCALIZED_ACTION_SET_NAME_SIZE);
 		XR_ENSURE(xrCreateActionSet(Instance, &ActionSetInfo, &HapticsActionSet));
 
 		// Create hand haptics paths
@@ -135,8 +135,8 @@ namespace OculusXRInput
 			ActionCreateInfo.next = nullptr;
 			ActionCreateInfo.actionType = XR_ACTION_TYPE_VIBRATION_OUTPUT;
 
-			FCStringAnsi::Strcpy(ActionCreateInfo.actionName, XR_MAX_ACTION_NAME_SIZE, ActionName);
-			FCStringAnsi::Strcpy(ActionCreateInfo.localizedActionName, XR_MAX_LOCALIZED_ACTION_NAME_SIZE, ActionName);
+			FCStringAnsi::Strncpy(ActionCreateInfo.actionName, ActionName, XR_MAX_ACTION_NAME_SIZE);
+			FCStringAnsi::Strncpy(ActionCreateInfo.localizedActionName, ActionName, XR_MAX_LOCALIZED_ACTION_NAME_SIZE);
 
 			ActionCreateInfo.countSubactionPaths = sizeof(XrPathBothHands) / sizeof(XrPath);
 			ActionCreateInfo.subactionPaths = XrPathBothHands;

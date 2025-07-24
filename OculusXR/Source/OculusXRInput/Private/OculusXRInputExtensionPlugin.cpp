@@ -63,8 +63,8 @@ namespace OculusXRInput
 		ActionSetInfo.next = nullptr;
 		// Using max priority since these actions are needed to calculate and send derived inputs
 		ActionSetInfo.priority = ToXrPriority(MAX_int32);
-		FCStringAnsi::Strcpy(ActionSetInfo.actionSetName, XR_MAX_ACTION_SET_NAME_SIZE, "oculustouchderivedinputsactionset");
-		FCStringAnsi::Strcpy(ActionSetInfo.localizedActionSetName, XR_MAX_LOCALIZED_ACTION_SET_NAME_SIZE, "OculusTouchDerivedInputsActionSet");
+		FCStringAnsi::Strncpy(ActionSetInfo.actionSetName, "oculustouchderivedinputsactionset", XR_MAX_ACTION_SET_NAME_SIZE);
+		FCStringAnsi::Strncpy(ActionSetInfo.localizedActionSetName, "OculusTouchDerivedInputsActionSet", XR_MAX_LOCALIZED_ACTION_SET_NAME_SIZE);
 		XR_ENSURE(xrCreateActionSet(Instance, &ActionSetInfo, &DerivedActionSet));
 
 		for (FDerivedActionProperties& DerivedAction : DerivedActions)
@@ -73,8 +73,8 @@ namespace OculusXRInput
 			ActionInfo.next = nullptr;
 			ActionInfo.actionType = DerivedAction.Type;
 			ActionInfo.countSubactionPaths = 0;
-			FCStringAnsi::Strcpy(ActionInfo.actionName, XR_MAX_ACTION_NAME_SIZE, TCHAR_TO_ANSI(*DerivedAction.Name.ToLower()));
-			FCStringAnsi::Strcpy(ActionInfo.localizedActionName, XR_MAX_LOCALIZED_ACTION_NAME_SIZE, TCHAR_TO_ANSI(*DerivedAction.Name));
+			FCStringAnsi::Strncpy(ActionInfo.actionName, TCHAR_TO_ANSI(*DerivedAction.Name.ToLower()), XR_MAX_ACTION_NAME_SIZE);
+			FCStringAnsi::Strncpy(ActionInfo.localizedActionName, TCHAR_TO_ANSI(*DerivedAction.Name), XR_MAX_LOCALIZED_ACTION_NAME_SIZE);
 			XR_ENSURE(xrCreateAction(DerivedActionSet, &ActionInfo, &DerivedAction.Action));
 		}
 	}

@@ -32,7 +32,7 @@ namespace OculusXRHMD
 			LayerDesc.QuadSize = FVector2D(0.01f, 0.01f);
 			LayerDesc.Priority = 0;
 			LayerDesc.PositionType = IStereoLayers::TrackerLocked;
-			LayerDesc.Texture = nullptr;
+			LayerDesc.TextureObj = nullptr;
 			UELayer = MakeShareable(new FLayer(NextLayerId++));
 			UELayer->SetDesc(LayerDesc);
 		}
@@ -431,7 +431,7 @@ namespace OculusXRHMD
 		OculusDesc.bIsDynamic = Splash.bIsDynamic || Splash.bIsExternal;
 		OculusDesc.TextureOffset = Splash.UVRect.Min;
 		OculusDesc.TextureScale = Splash.UVRect.Max;
-		OculusDesc.LoadedTexture = Splash.Texture;
+		OculusDesc.LoadedTexture = Splash.TextureObj->GetResource()->GetTextureReference();
 
 		AddSplash(OculusDesc);
 	}
@@ -525,7 +525,7 @@ namespace OculusXRHMD
 			}
 			//@DBG END
 
-			if (SplashLayer.Desc.LoadedTexture)
+			if (SplashLayer.Desc.LoadedTexture.IsValid())
 			{
 				SplashLayer.Layer = MakeShareable(new FLayer(NextLayerId++));
 				SplashLayer.Layer->SetDesc(StereoLayerDescFromOculusSplashDesc(SplashLayer.Desc));

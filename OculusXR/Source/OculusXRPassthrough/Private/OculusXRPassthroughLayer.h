@@ -16,7 +16,7 @@ namespace XRPassthrough
 	using XrCompositionLayerBaseHeaderType = XrCompositionLayerBaseHeader;
 #else
 	// epic branch has member as const
-	using XrCompositionLayerBaseHeaderType = const XrCompositionLayerBaseHeader;
+	using XrCompositionLayerBaseHeaderType = XrCompositionLayerBaseHeader;
 #endif
 
 	class FPassthroughXR;
@@ -98,7 +98,9 @@ namespace XRPassthrough
 	{
 		FORCEINLINE bool operator()(const FPassthroughLayerPtr& A, const FPassthroughLayerPtr& B) const
 		{
+			PRAGMA_DISABLE_DEPRECATION_WARNINGS
 			return A->GetDesc().GetLayerId() < B->GetDesc().GetLayerId();
+			PRAGMA_ENABLE_DEPRECATION_WARNINGS
 		}
 	};
 

@@ -64,7 +64,7 @@ namespace OculusXRHMD
 
 		bool ShapeNeedsTextures(ovrpShape shape);
 
-		FTextureRHIRef GetTexture() { return Desc.Texture; }
+		FTextureRHIRef GetTexture() { return Desc.LeftTextureObj->GetResource()->GetTextureReference(); }
 
 		TSharedPtr<FLayer, ESPMode::ThreadSafe> Clone() const;
 

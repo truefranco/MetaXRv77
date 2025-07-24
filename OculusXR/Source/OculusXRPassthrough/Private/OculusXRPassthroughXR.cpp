@@ -283,7 +283,7 @@ namespace XRPassthrough
 		return Layer;
 	}
 
-	void FPassthroughXR::UpdateCompositionLayers(XrSession InSession, TArray<XrCompositionLayerBaseHeaderType*>& Headers)
+	void FPassthroughXR::UpdateCompositionLayers_RHIThread(XrSession InSession, TArray<XrCompositionLayerBaseHeaderType*>& Headers)
 	{
 		check(IsInRenderingThread() || IsInRHIThread());
 
@@ -326,7 +326,7 @@ namespace XRPassthrough
 		WorldToMetersScale = TS->GetWorldToMetersScale();
 	}
 
-	void FPassthroughXR::OnBeginRendering_GameThread(XrSession InSession)
+	void FPassthroughXR::OnBeginRendering_GameThread(XrSession InSession, FSceneViewFamily& InViewFamily, TArrayView<const uint32> VisibleLayers)
 	{
 		// Send game thread layers to render thread ones
 		TArray<FPassthroughLayerPtr> XLayers;
@@ -351,9 +351,10 @@ namespace XRPassthrough
 			// Scan for changes
 			while (XLayerIndex < XLayers.Num() && LayerIndex_RenderThread < Layers_RenderThread.Num())
 			{
+				PRAGMA_DISABLE_DEPRECATION_WARNINGS
 				uint32 LayerIdA = XLayers[XLayerIndex]->GetDesc().GetLayerId();
 				uint32 LayerIdB = Layers_RenderThread[LayerIndex_RenderThread]->GetDesc().GetLayerId();
-
+				PRAGMA_ENABLE_DEPRECATION_WARNINGS
 				if (LayerIdA < LayerIdB) // If a layer was inserted in the middle of existing ones
 				{
 					if (XLayers[XLayerIndex]->Initialize_RenderThread(InSession))
@@ -434,10 +435,12 @@ namespace XRPassthrough
 					{
 						if (Layer->GetLayerHandle() == LayerResumedEvent->layer)
 						{
+							PRAGMA_DISABLE_DEPRECATION_WARNINGS
 							UE_LOG(LogOculusXRPassthrough, Log, TEXT("FOculusXRPassthroughEventHandling - Passthrough Layer #%d resumed"), Layer->GetDesc().GetLayerId());
-
 							// Send event
 							OculusXRPassthrough::FOculusXRPassthroughEventDelegates::OculusPassthroughLayerResumed.Broadcast(Layer->GetDesc().GetLayerId());
+							PRAGMA_ENABLE_DEPRECATION_WARNINGS
+
 							break;
 						}
 					}
@@ -446,7 +449,7 @@ namespace XRPassthrough
 		}
 	}
 
-	const void* FPassthroughXR::OnEndProjectionLayer(XrSession InSession, int32 InLayerIndex, const void* InNext, XrCompositionLayerFlags& OutFlags)
+	const void* FPassthroughXR::OnEndProjectionLayer_RHIThread(XrSession InSession, int32 InLayerIndex, const void* InNext, XrCompositionLayerFlags& OutFlags)
 	{
 		check(IsInRenderingThread() || IsInRHIThread());
 

@@ -64,18 +64,18 @@ namespace XRPassthrough
 		virtual const void* OnCreateSession(XrInstance InInstance, XrSystemId InSystem, const void* InNext) override;
 		virtual void PostCreateSession(XrSession InSession) override;
 		virtual void OnDestroySession(XrSession InSession) override;
-		virtual const void* OnEndProjectionLayer(XrSession InSession, int32 InLayerIndex, const void* InNext, XrCompositionLayerFlags& OutFlags) override;
+		virtual const void* OnEndProjectionLayer_RHIThread(XrSession InSession, int32 InLayerIndex, const void* InNext, XrCompositionLayerFlags& OutFlags) override;
 
 #if defined(WITH_OCULUS_BRANCH) || defined(WITH_OPENXR_BRANCH)
 		virtual void OnCreateLayer(uint32 LayerId) override;
 		virtual void OnDestroyLayer(uint32 LayerId) override;
 		virtual void OnSetLayerDesc(uint32 LayerId) override;
 #endif
-		virtual void UpdateCompositionLayers(XrSession InSession, TArray<XrCompositionLayerBaseHeaderType*>& Headers) override;
+		virtual void UpdateCompositionLayers_RHIThread(XrSession InSession, TArray<XrCompositionLayerBaseHeaderType*>& Headers) override;
 
 		virtual void OnWorldTickEnd(UWorld* InWorld, ELevelTick InTickType, float InDeltaSeconds);
 
-		virtual void OnBeginRendering_GameThread(XrSession InSession) override;
+		virtual void OnBeginRendering_GameThread(XrSession InSession, FSceneViewFamily& InViewFamily, TArrayView<const uint32> VisibleLayers) override;
 		virtual void OnPostRender_RenderThread(FRDGBuilder& GraphBuilder);
 
 		virtual void OnEvent(XrSession InSession, const XrEventDataBaseHeader* InHeader) override;

@@ -111,8 +111,8 @@ namespace OculusXRInput
 		MicrogestureActionSet = XR_NULL_HANDLE;
 		XrActionSetCreateInfo ActionSetInfo{ XR_TYPE_ACTION_SET_CREATE_INFO };
 		ActionSetInfo.next = nullptr;
-		FCStringAnsi::Strcpy(ActionSetInfo.actionSetName, XR_MAX_ACTION_SET_NAME_SIZE, "oculusmicrogestureactionset");
-		FCStringAnsi::Strcpy(ActionSetInfo.localizedActionSetName, XR_MAX_LOCALIZED_ACTION_SET_NAME_SIZE, "OculusMicrogestureActionSet");
+		FCStringAnsi::Strncpy(ActionSetInfo.actionSetName, "oculusmicrogestureactionset", XR_MAX_ACTION_SET_NAME_SIZE);
+		FCStringAnsi::Strncpy(ActionSetInfo.localizedActionSetName, "OculusMicrogestureActionSet", XR_MAX_LOCALIZED_ACTION_SET_NAME_SIZE);
 		XR_ENSURE(xrCreateActionSet(Instance, &ActionSetInfo, &MicrogestureActionSet));
 
 		// Declare left hand microgesture actions
@@ -139,8 +139,8 @@ namespace OculusXRInput
 			ActionCreateInfo.next = nullptr;
 			ActionCreateInfo.actionType = XR_ACTION_TYPE_BOOLEAN_INPUT;
 			ActionCreateInfo.countSubactionPaths = 0;
-			FCStringAnsi::Strcpy(ActionCreateInfo.actionName, XR_MAX_ACTION_NAME_SIZE, TCHAR_TO_ANSI(*MicrogestureAction.Name.ToLower()));
-			FCStringAnsi::Strcpy(ActionCreateInfo.localizedActionName, XR_MAX_LOCALIZED_ACTION_NAME_SIZE, TCHAR_TO_ANSI(*MicrogestureAction.Name));
+			FCStringAnsi::Strncpy(ActionCreateInfo.actionName, TCHAR_TO_ANSI(*MicrogestureAction.Name.ToLower()), XR_MAX_ACTION_NAME_SIZE);
+			FCStringAnsi::Strncpy(ActionCreateInfo.localizedActionName, TCHAR_TO_ANSI(*MicrogestureAction.Name), XR_MAX_LOCALIZED_ACTION_NAME_SIZE);
 
 			// Create the action
 			XR_ENSURE(xrCreateAction(MicrogestureActionSet, &ActionCreateInfo, &MicrogestureAction.Action));

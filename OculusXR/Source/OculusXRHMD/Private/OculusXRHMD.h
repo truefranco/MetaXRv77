@@ -27,6 +27,7 @@
 #include "SceneViewExtension.h"
 #include "Engine/Engine.h"
 #include "Engine/StaticMeshActor.h"
+#include "Engine/TextureRenderTarget2D.h"
 #include "XRThreadUtils.h"
 #include "ProceduralMeshComponent.h"
 #include "Shader.h"
@@ -195,8 +196,8 @@ namespace OculusXRHMD
 		virtual void OnEndPlay(FWorldContext& InWorldContext) override;
 		virtual bool OnStartGameFrame(FWorldContext& WorldContext) override;
 		virtual bool OnEndGameFrame(FWorldContext& WorldContext) override;
-		virtual void OnBeginRendering_RenderThread(FRHICommandListImmediate& RHICmdList, FSceneViewFamily& ViewFamily) override;
-		virtual void OnBeginRendering_GameThread() override;
+		virtual void OnBeginRendering_RenderThread(FRDGBuilder& GraphBuilder, FSceneViewFamily& ViewFamily) override;
+		virtual void OnBeginRendering_GameThread(FSceneViewFamily& SceneViewFamily) override;
 		virtual class IXRLoadingScreen* CreateLoadingScreen() override { return GetSplash(); }
 		virtual FVector2D GetPlayAreaBounds(EHMDTrackingOrigin::Type Origin) const override;
 
@@ -273,7 +274,7 @@ namespace OculusXRHMD
 		virtual FMatrix GetStereoProjectionMatrix(const int32 ViewIndex) const override;
 		virtual void InitCanvasFromView(class FSceneView* InView, class UCanvas* Canvas) override;
 		// virtual void GetEyeRenderParams_RenderThread(const struct FRenderingCompositePassContext& Context, FVector2D& EyeToSrcUVScaleValue, FVector2D& EyeToSrcUVOffsetValue) const override;
-		virtual void RenderTexture_RenderThread(class FRHICommandListImmediate& RHICmdList, class FRHITexture* BackBuffer, class FRHITexture* SrcTexture, FVector2D WindowSize) const override;
+		virtual void RenderTexture_RenderThread(class FRDGBuilder& GraphBuilder, FRDGTextureRef BackBuffer, FRDGTextureRef SrcTexture, FVector2f WindowSize) const override;
 		// virtual void SetClippingPlanes(float NCP, float FCP) override;
 		virtual IStereoRenderTargetManager* GetRenderTargetManager() override { return this; }
 		virtual IStereoLayers* GetStereoLayers() override { return this; }
@@ -287,7 +288,7 @@ namespace OculusXRHMD
 
 		// FHeadMountedDisplayBase interface
 		virtual FVector2D GetEyeCenterPoint_RenderThread(int32 ViewIndex) const override;
-		virtual FIntRect GetFullFlatEyeRect_RenderThread(FTextureRHIRef EyeTexture) const override;
+		virtual FIntRect GetFullFlatEyeRect_RenderThread(const FRHITextureDesc& EyeTexture) const override;
 		virtual void CopyTexture_RenderThread(FRHICommandListImmediate& RHICmdList, FRHITexture* SrcTexture, FIntRect SrcRect, FRHITexture* DstTexture, FIntRect DstRect, bool bClearBlack, bool bNoAlpha) const override;
 		virtual bool PopulateAnalyticsAttributes(TArray<struct FAnalyticsEventAttribute>& EventAttributes) override;
 
@@ -324,9 +325,9 @@ namespace OculusXRHMD
 		virtual void SetLayerDesc(uint32 LayerId, const IStereoLayers::FLayerDesc& InLayerDesc) override;
 		virtual bool GetLayerDesc(uint32 LayerId, IStereoLayers::FLayerDesc& OutLayerDesc) override;
 		virtual void MarkTextureForUpdate(uint32 LayerId) override;
-		virtual IStereoLayers::FLayerDesc GetDebugCanvasLayerDesc(FTextureRHIRef Texture) override;
+		virtual IStereoLayers::FLayerDesc GetDebugCanvasLayerDesc(class UTextureRenderTarget2D* Texture) override;
 		virtual void GetAllocatedTexture(uint32 LayerId, FTextureRHIRef& Texture, FTextureRHIRef& LeftTexture) override;
-		virtual bool ShouldCopyDebugLayersToSpectatorScreen() const override { return true; }
+		//virtual bool ShouldCopyDebugLayersToSpectatorScreen() const { return true; }
 		virtual void PushLayerState(bool) override
 		{ /* Todo */
 		}

@@ -25,7 +25,7 @@ namespace XRMovement
 		virtual const void* OnCreateInstance(class IOpenXRHMDModule* InModule, const void* InNext) override;
 		virtual const void* OnCreateSession(XrInstance InInstance, XrSystemId InSystem, const void* InNext) override;
 		virtual void OnDestroySession(XrSession InSession) override;
-		virtual void OnBeginRendering_GameThread(XrSession InSession) override;
+		virtual void OnBeginRendering_GameThread(XrSession InSession, FSceneViewFamily& InViewFamily, TArrayView<const uint32> VisibleLayers) override;
 
 	public:
 		FFaceTrackingXR();
