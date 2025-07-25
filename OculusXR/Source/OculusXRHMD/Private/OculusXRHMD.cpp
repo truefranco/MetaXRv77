@@ -2556,10 +2556,10 @@ namespace OculusXRHMD
 		{
 			StereoLayerDesc.Transform = FTransform(FVector(100.f, 0, 0));
 		}
-		FTextureRenderTarget2DResource* RTRes = (FTextureRenderTarget2DResource*)Texture->GetRenderTargetResource();
+		
 		StereoLayerDesc.QuadSize = FVector2D(180.f, 180.f);
 		StereoLayerDesc.PositionType = IStereoLayers::ELayerType::FaceLocked;
-		StereoLayerDesc.LayerSize = RTRes->GetSizeXY();
+		StereoLayerDesc.LayerSize = StereoLayerDesc.LayerSize = FIntPoint(Texture->SizeX, Texture->SizeY);
 		StereoLayerDesc.Flags = IStereoLayers::ELayerFlags::LAYER_FLAG_TEX_CONTINUOUS_UPDATE;
 		StereoLayerDesc.Flags |= IStereoLayers::ELayerFlags::LAYER_FLAG_QUAD_PRESERVE_TEX_RATIO;
 		return StereoLayerDesc;
@@ -2666,7 +2666,7 @@ namespace OculusXRHMD
 		if (SpectatorScreenController && (NativeXrApi != ovrpXrApi_OpenXR || FApp::HasVRFocus()))
 		{
 			SpectatorScreenController->UpdateSpectatorScreenMode_RenderThread();
-			Frame_RenderThread->Flags.bSpectatorScreenActive = SpectatorScreenController->GetSpectatorScreenMode() != ESpectatorScreenMode::Disabled;
+			Frame_RenderThread->Flags.bSpectatorScreenActive = !InGameThread();
 		}
 
 		// Update mirror texture
@@ -3792,7 +3792,12 @@ namespace OculusXRHMD
 	ESpectatorScreenMode FOculusXRHMD::GetSpectatorScreenMode_RenderThread() const
 	{
 		CheckInRenderThread();
-		return SpectatorScreenController ? SpectatorScreenController->GetSpectatorScreenMode() : ESpectatorScreenMode::Disabled;
+
+		if (IsInGameThread())
+		{
+			return ESpectatorScreenMode::SingleEyeCroppedToFill;
+		}
+		return ESpectatorScreenMode::Disabled;
 	}
 
 #if !UE_BUILD_SHIPPING

@@ -471,7 +471,9 @@ namespace OculusXRHMD
 		LayerDesc.UVRect = FBox2D(OculusDesc.TextureOffset, OculusDesc.TextureOffset + OculusDesc.TextureScale);
 		LayerDesc.Priority = INT32_MAX - (int32)(OculusDesc.TransformInMeters.GetTranslation().X * 1000.f);
 		LayerDesc.PositionType = IStereoLayers::TrackerLocked;
+		PRAGMA_DISABLE_DEPRECATION_WARNINGS
 		LayerDesc.Texture = OculusDesc.LoadedTexture;
+		PRAGMA_ENABLE_DEPRECATION_WARNINGS
 		LayerDesc.Flags = IStereoLayers::LAYER_FLAG_QUAD_PRESERVE_TEX_RATIO | (OculusDesc.bNoAlphaChannel ? IStereoLayers::LAYER_FLAG_TEX_NO_ALPHA_CHANNEL : 0) | (OculusDesc.bIsDynamic ? IStereoLayers::LAYER_FLAG_TEX_CONTINUOUS_UPDATE : 0);
 
 		return LayerDesc;

@@ -33,8 +33,9 @@ namespace OculusXRHMD
 		void SetMRForeground(UTextureRenderTarget2D* Texture) { ForegroundRenderTexture = Texture; }
 		void SetMRBackground(UTextureRenderTarget2D* Texture) { BackgroundRenderTexture = Texture; }
 
+		// ADD these two new overrides
 		virtual void RenderSpectatorScreen_RenderThread(class FRDGBuilder& GraphBuilder, FRDGTextureRef BackBuffer, FRDGTextureRef SrcTexture, FRDGTextureRef LayersTexture, FVector2f WindowSize) override;
-		//virtual void AddSpectatorModePass(ESpectatorScreenMode SpectatorMode, class FRDGBuilder& GraphBuilder, FRDGTextureRef TargetTexture, FRDGTextureRef EyeTexture, FRDGTextureRef OtherTexture, FVector2f WindowSize) override;
+		virtual void AddSpectatorModePass(ESpectatorScreenMode SpectatorMode, class FRDGBuilder& GraphBuilder, FRDGTextureRef TargetTexture, FRDGTextureRef EyeTexture, FRDGTextureRef OtherTexture, FVector2f WindowSize) override;
 
 	private:
 		FOculusXRHMD* OculusXRHMD;
