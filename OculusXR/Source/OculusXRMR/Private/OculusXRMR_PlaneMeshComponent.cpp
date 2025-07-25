@@ -2,6 +2,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "OculusXRMR_PlaneMeshComponent.h"
+#include "SceneView.h"
 #include "RenderingThread.h"
 #include "RenderResource.h"
 #include "PrimitiveViewRelevance.h"

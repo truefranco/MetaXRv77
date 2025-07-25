@@ -1,6 +1,7 @@
 // Copyright (c) Meta Platforms, Inc. and affiliates.
 
 #include "OculusXRMultiPlayerStateExtensionPlugin.h"
+
 #include "OculusXRHMDRuntimeSettings.h"
 
 DEFINE_LOG_CATEGORY(LogOculusMultiPlayerStateExtensionPlugin);

@@ -9,6 +9,7 @@
 
 class FPrimitiveSceneProxy;
 class UTextureRenderTarget2D;
+class FSceneViewFamily;
 
 USTRUCT(BlueprintType)
 struct FOculusXRMR_PlaneMeshTriangle

@@ -20,7 +20,8 @@ namespace UnrealBuildTool.Rules
                     Path.Combine(EngineDir, "Source/Runtime/OpenGLDrv/Private"),
                     Path.Combine(EngineDir, "Source/Runtime/Engine/Classes/Components"),
                     Path.Combine(EngineDir, "Source/Runtime/Engine/Classes/Kismet"),
-                });
+					Path.Combine(EngineDir, "Source/Editor/UnrealEd/Classes/Settings"),
+				});
 
             PublicIncludePathModuleNames.AddRange(
                 new string[] {
@@ -36,7 +37,7 @@ namespace UnrealBuildTool.Rules
                     "Core",
                     "CoreUObject",
                     "Engine",
-                    "EngineSettings",
+					"EngineSettings",
                     "InputCore",
                     "RHI",
                     "RHICore",
@@ -78,12 +79,12 @@ namespace UnrealBuildTool.Rules
                     });
             }
 
-            if (Target.bBuildEditor == true)
-            {
-                PrivateDependencyModuleNames.Add("UnrealEd");
-            }
-
-            AddEngineThirdPartyPrivateStaticDependencies(Target, "OpenGL");
+			if (Target.bBuildEditor == true)
+			{
+				PrivateDependencyModuleNames.Add("UnrealEd");
+			}
+			
+			AddEngineThirdPartyPrivateStaticDependencies(Target, "OpenGL");
 
             if (Target.Platform == UnrealTargetPlatform.Win64)
             {
